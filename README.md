@@ -32,7 +32,8 @@ In a separate terminal execute:
 `$ npm run start`
 
 ## Project Flow
-![image](https://user-images.githubusercontent.com/88650559/210250292-51d84510-5c9b-4378-8c64-fccf62a75474.png)
+![image](https://user-images.githubusercontent.com/88650559/210251835-c38d6d36-c206-4bbd-be5b-d118fd487958.png)
+
 
 ## Solidity Contract functions
 1. List domain
