@@ -56,24 +56,22 @@ contract PolygonRegistrarController is Ownable {
         commitments[commitment] = block.timestamp;
   }
 
-  function makeCommitmentWithConfig(string memory name, address owner, bytes32 secret, address resolver) pure public returns(bytes32) {
+  function makeCommitmentWithConfig(string memory name, bytes32 secret, address resolver) public view returns(bytes32) {
     bytes32 label = keccak256(bytes(name));
-    return keccak256(abi.encodePacked(label, owner, resolver, secret));
+    return keccak256(abi.encodePacked(label, msg.sender, resolver, secret));
   }
 
   // A register function that adds their names to our mapping
   function registerDomain(string memory name, bytes32 secret, address resolver) public payable {
     require(resolver != address(0), "Need a resolver contract");
 
-    bytes32 commitment = makeCommitmentWithConfig(name, msg.sender, secret, resolver);
+    bytes32 commitment = makeCommitmentWithConfig(name, secret, resolver);
     uint256 cost =  _consumeCommitment(name, commitment);
 
     bytes32 label = keccak256(bytes(name));
     uint256 tokenId = uint256(label);
 
-    string memory finalTokenUri =  metadata.URI(name);
-
-    base.register(tokenId, address(this), finalTokenUri);
+    base.register(tokenId, address(this), metadata.URI(name));
 
     // The nodehash of this label
     bytes32 nodehash = keccak256(abi.encodePacked(base.baseNode(), label));

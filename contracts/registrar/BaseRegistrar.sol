@@ -74,26 +74,24 @@ contract BaseRegistrar is ERC721, ERC721URIStorage, IBaseRegistrar, Ownable {
         return true;
     }
 
-    function register(
+    /*function register(
         uint256 id,
         address owner,
         string memory finalTokenURI
     ) external {
          _register(id, owner, finalTokenURI, true);
-    }
+    }*/
 
-    function _register(uint256 id, address owner, string memory finalTokenURI, bool updateRegistry) internal live onlyController{
+    function register(uint256 id, address owner, string memory finalTokenURI) external live onlyController{
         require(available(id));
 
         domains[id] = owner;
 
-        _safeMint(msg.sender, id);
+        _mint(owner, id);
         _setTokenURI(id, finalTokenURI);
 
-        if (updateRegistry) {
-            pns.setSubnodeOwner(baseNode, bytes32(id), owner);
-        }
-
+        pns.setSubnodeOwner(baseNode, bytes32(id), owner);
+        
         emit NameRegistered(id, owner);
 
     }
@@ -123,7 +121,7 @@ contract BaseRegistrar is ERC721, ERC721URIStorage, IBaseRegistrar, Ownable {
 
     function supportsInterface(bytes4 interfaceID)
         public
-        view
+        pure
         override(ERC721, IERC165)
         returns (bool)
     {
