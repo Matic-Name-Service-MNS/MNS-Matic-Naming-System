@@ -147,5 +147,10 @@ contract PolygonRegistrarController is Ownable {
            interfaceID == COMMITMENT_CONTROLLER_ID;
   }
 
+  // Function to receive Matic. msg.data must be empty
+  receive() external payable {}
+
+  // Fallback function is called when msg.data is not empty
+  fallback() external payable {}
 
 }
